@@ -1,0 +1,102 @@
+import java.util.ArrayList;
+
+class InsufficientFundsException extends Exception {
+    public InsufficientFundsException(String message) {
+        super(message);
+    }
+}
+
+class Account {
+
+    String accountNumber;
+    String name;
+    double balance;
+
+    Account(String accountNumber, String name, double balance) {
+        this.accountNumber = accountNumber;
+        this.name = name;
+        this.balance = balance;
+    }
+
+    void deposit(double amount) {
+        balance += amount;
+        System.out.println(amount + " deposited successfully.");
+    }
+
+    void withdraw(double amount) throws InsufficientFundsException {
+        if (amount > balance) {
+            throw new InsufficientFundsException("Not enough balance.");
+        }
+
+        balance -= amount;
+        System.out.println(amount + " withdrawn successfully.");
+    }
+
+    void transfer(Account target, double amount) throws InsufficientFundsException {
+        if (amount > balance) {
+            throw new InsufficientFundsException("Transfer failed. Not enough balance.");
+        }
+
+        balance -= amount;
+        target.balance += amount;
+
+        System.out.println(amount + " transferred to " + target.name);
+    }
+
+    void display() {
+        System.out.println("\nAccount Number: " + accountNumber);
+        System.out.println("Name: " + name);
+        System.out.println("Balance: " + balance);
+    }
+}
+
+class Bank {
+
+    ArrayList<Account> accounts = new ArrayList<>();
+
+    void createAccount(String accountNumber, String name, double balance) {
+        Account account = new Account(accountNumber, name, balance);
+        accounts.add(account);
+        System.out.println("Account created for " + name);
+    }
+
+    Account getAccount(String accountNumber) {
+        for (Account account : accounts) {
+            if (account.accountNumber.equals(accountNumber)) {
+                return account;
+            }
+        }
+        return null;
+    }
+
+    void displayAll() {
+        for (Account account : accounts) {
+            account.display();
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Bank bank = new Bank();
+
+        bank.createAccount("101", "Ravi", 5000);
+        bank.createAccount("102", "Amit", 3000);
+
+        Account acc1 = bank.getAccount("101");
+        Account acc2 = bank.getAccount("102");
+
+        try {
+            acc1.deposit(1000);
+            acc1.withdraw(2000);
+            acc1.transfer(acc2, 1500);
+            acc2.withdraw(10000);
+        } catch (InsufficientFundsException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        bank.displayAll();
+    }
+}
