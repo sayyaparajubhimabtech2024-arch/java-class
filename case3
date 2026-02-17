@@ -1,0 +1,99 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Student {
+
+    String name;
+    List<Double> grades;
+
+    Student(String name) {
+        this.name = name;
+        grades = new ArrayList<>();
+    }
+
+    void addGrade(double grade) {
+        grades.add(grade);
+        System.out.println("Grade added for " + name);
+    }
+
+    double calculateAverage() {
+
+        double sum = 0;
+
+        for (double g : grades) {
+            sum = sum + g;
+        }
+
+        if (grades.size() == 0) {
+            return 0;
+        }
+
+        return sum / grades.size();
+    }
+
+    void displayStudentDetails() {
+
+        System.out.println("\nStudent Name : " + name);
+        System.out.println("Grades : " + grades);
+        System.out.println("Average : " + calculateAverage());
+    }
+}
+
+class GradeManager {
+
+    ArrayList<Student> students = new ArrayList<>();
+
+    void addStudent(Student s) {
+        students.add(s);
+        System.out.println("Student added: " + s.name);
+    }
+
+    Student findStudentByName(String name) {
+
+        for (Student s : students) {
+
+            if (s.name.equalsIgnoreCase(name)) {
+                return s;
+            }
+        }
+
+        return null;
+    }
+
+    void displayAllStudents() {
+
+        for (Student s : students) {
+            s.displayStudentDetails();
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        GradeManager gm = new GradeManager();
+
+        Student s1 = new Student("Ravi");
+        Student s2 = new Student("Amit");
+
+        gm.addStudent(s1);
+        gm.addStudent(s2);
+
+        s1.addGrade(85);
+        s1.addGrade(90);
+
+        s2.addGrade(75);
+        s2.addGrade(80);
+        s2.addGrade(70);
+
+        gm.displayAllStudents();
+
+        Student result = gm.findStudentByName("Ravi");
+
+        if (result != null) {
+            System.out.println("\nFound Student:");
+            result.displayStudentDetails();
+        }
+    }
+}
