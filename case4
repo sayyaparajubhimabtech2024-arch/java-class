@@ -1,0 +1,82 @@
+import java.util.ArrayList;
+
+class Product {
+
+    String name;
+    double price;
+
+    Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+}
+
+class ShoppingCart {
+
+    ArrayList<Product> cart = new ArrayList<>();
+
+    void addProduct(Product product) {
+        cart.add(product);
+        System.out.println(product.name + " added to cart");
+    }
+
+    void removeProduct(String productName) {
+
+        boolean found = false;
+
+        for (Product p : cart) {
+
+            if (p.name.equalsIgnoreCase(productName)) {
+
+                cart.remove(p);
+                System.out.println(productName + " removed from cart");
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println(productName + " not found in cart");
+        }
+    }
+
+    double calculateTotalCost() {
+
+        double total = 0;
+
+        for (Product p : cart) {
+            total = total + p.price;
+        }
+
+        return total;
+    }
+
+    void displayCart() {
+
+        System.out.println("\nProducts in Cart:");
+
+        for (Product p : cart) {
+            System.out.println(p.name + " - Rs." + p.price);
+        }
+
+        System.out.println("Total Cost: Rs." + calculateTotalCost());
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        ShoppingCart cart = new ShoppingCart();
+
+        cart.addProduct(new Product("Laptop", 50000));
+        cart.addProduct(new Product("Mouse", 500));
+        cart.addProduct(new Product("Keyboard", 1500));
+
+        cart.displayCart();
+
+        cart.removeProduct("Mouse");
+
+        cart.displayCart();
+    }
+}
